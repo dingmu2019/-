@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../LanguageContext';
 
-// Define themes
+// Define themes with translation keys
 const themes = [
-  { id: 'forest', name: 'Forest', color: 'bg-green-950', accent: 'text-green-300' },
-  { id: 'ocean', name: 'Ocean', color: 'bg-blue-950', accent: 'text-blue-300' },
-  { id: 'fire', name: 'Fire', color: 'bg-red-950', accent: 'text-red-300' },
-  { id: 'space', name: 'Cosmos', color: 'bg-indigo-950', accent: 'text-indigo-300' },
+  { id: 'forest', nameKey: 'theme_forest', color: 'bg-green-950', accent: 'text-green-300' },
+  { id: 'ocean', nameKey: 'theme_ocean', color: 'bg-blue-950', accent: 'text-blue-300' },
+  { id: 'fire', nameKey: 'theme_fire', color: 'bg-red-950', accent: 'text-red-300' },
+  { id: 'space', nameKey: 'theme_space', color: 'bg-indigo-950', accent: 'text-indigo-300' },
 ];
 
 const SectionFuture: React.FC = () => {
+  const { t } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -28,10 +30,10 @@ const SectionFuture: React.FC = () => {
       <div className="absolute inset-0 bg-black/30 z-0"></div>
 
       <div className="z-10 text-center px-4">
-        <p className="text-white/60 mb-6 uppercase tracking-widest text-sm">Era 6: Manifestation</p>
+        <p className="text-white/60 mb-6 uppercase tracking-widest text-sm">{t('future_era')}</p>
         
         <h1 className="text-4xl md:text-6xl text-white font-bold leading-tight mb-8">
-          Imagining: <br />
+          {t('future_imagining')} <br />
           <AnimatePresence mode="wait">
             <motion.span
               key={currentTheme.id}
@@ -41,7 +43,7 @@ const SectionFuture: React.FC = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
             >
-              {currentTheme.name}
+              {t(currentTheme.nameKey)}
             </motion.span>
           </AnimatePresence>
         </h1>
@@ -52,7 +54,7 @@ const SectionFuture: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
         >
-            World Generated Successfully.
+            {t('future_generated')}
         </motion.div>
       </div>
 

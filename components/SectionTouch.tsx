@@ -1,7 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../LanguageContext';
 
 const SectionTouch: React.FC = () => {
+  const { t } = useLanguage();
+
   // Generate a few random "touch points"
   const touchPoints = [
     { id: 1, x: -100, y: -50, delay: 0, color: 'bg-blue-400' },
@@ -19,8 +22,8 @@ const SectionTouch: React.FC = () => {
       <div className="absolute bottom-[-20%] left-[20%] w-[50vh] h-[50vh] bg-pink-200 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 animate-blob animation-delay-4000"></div>
 
       <div className="z-10 text-center mb-10">
-        <h2 className="text-lg font-semibold text-gray-500 tracking-wide uppercase mb-2">Era 3: Touch Interface</h2>
-        <h1 className="text-6xl font-thin text-gray-800 tracking-tight">Fluidity.</h1>
+        <h2 className="text-lg font-semibold text-gray-500 tracking-wide uppercase mb-2">{t('touch_era')}</h2>
+        <h1 className="text-6xl font-thin text-gray-800 tracking-tight">{t('touch_title')}</h1>
       </div>
 
       <div className="relative w-full h-full max-w-4xl mx-auto flex items-center justify-center">
@@ -52,7 +55,7 @@ const SectionTouch: React.FC = () => {
 
         {/* Glassmorphism Card */}
         <div className="backdrop-blur-xl bg-white/30 border border-white/40 p-12 rounded-3xl shadow-2xl z-20 max-w-md text-center">
-           <p className="text-gray-600 font-medium">Swipe to unlock the world.</p>
+           <p className="text-gray-600 font-medium">{t('touch_card')}</p>
         </div>
       </div>
     </section>

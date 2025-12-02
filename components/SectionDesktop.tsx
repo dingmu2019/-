@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../LanguageContext';
 
 const SectionDesktop: React.FC = () => {
+  const { t } = useLanguage();
   const [text, setText] = useState('');
-  const fullText = "C:> RUN EVOLUTION.EXE...\nLOADING KERNEL...\nINITIALIZING INTERFACE...\nDESKTOP ENVIRONMENT LOADED.\nREADY_";
+  
+  // Fetch the translated string
+  const fullText = t('desktop_typing');
 
   useEffect(() => {
     let index = 0;
+    setText(''); // Reset text when language changes
+    
     const intervalId = setInterval(() => {
       setText((prev) => {
         if (index < fullText.length) {
             const char = fullText.charAt(index);
             index++;
-            // Handle newline visual shift slightly (optional, mostly automatic in pre-wrap)
             return prev + char;
         } else {
             // Reset loop for endless effect
@@ -22,7 +27,7 @@ const SectionDesktop: React.FC = () => {
     }, 100); // Typing speed
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [fullText]); // Add fullText dependency to restart animation on language switch
 
   return (
     <section className="w-full h-screen bg-[#0000AA] flex flex-col items-center justify-center font-['VT323',_monospace] text-white p-8 overflow-hidden relative border-t-4 border-gray-400 box-border">
@@ -32,7 +37,7 @@ const SectionDesktop: React.FC = () => {
 
       <div className="w-full max-w-3xl border-2 border-white p-1 min-h-[50vh] shadow-[10px_10px_0px_rgba(0,0,0,0.5)] bg-[#0000AA] z-20">
         <div className="bg-white text-[#0000AA] px-2 py-1 mb-4 flex justify-between uppercase font-bold text-xl">
-            <span>COMMAND PROMPT</span>
+            <span>{t('desktop_cmd')}</span>
             <span>[X]</span>
         </div>
         
@@ -43,8 +48,8 @@ const SectionDesktop: React.FC = () => {
       </div>
 
       <div className="mt-8 text-center opacity-70 z-20">
-        <p className="text-xl">Era 2: Desktop Computing</p>
-        <p className="text-sm">MS-DOS Version 6.22</p>
+        <p className="text-xl">{t('desktop_era')}</p>
+        <p className="text-sm">{t('desktop_sub')}</p>
       </div>
     </section>
   );

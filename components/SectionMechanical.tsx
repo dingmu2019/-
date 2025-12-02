@@ -1,7 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../LanguageContext';
 
 const SectionMechanical: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <section className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-neutral-900 text-neutral-200">
       
@@ -13,8 +16,8 @@ const SectionMechanical: React.FC = () => {
       />
 
       <div className="z-10 text-center space-y-8">
-        <h2 className="text-xl tracking-[0.5em] uppercase font-light text-neutral-400">Era 1: Mechanical</h2>
-        <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter">The Machine</h1>
+        <h2 className="text-xl tracking-[0.5em] uppercase font-light text-neutral-400">{t('mech_era')}</h2>
+        <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter">{t('mech_title')}</h1>
       </div>
 
       {/* Giant Rotating Gear */}

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
+import { useLanguage } from '../LanguageContext';
 
 const SectionSensing: React.FC = () => {
+  const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -77,8 +79,8 @@ const SectionSensing: React.FC = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-black via-[#111] to-[#050510]"></div>
 
       <div className="z-10 text-center absolute top-20 w-full">
-        <h2 className="text-gray-400 tracking-[0.3em] uppercase text-sm">Era 4: Sensing & Perception</h2>
-        <h1 className="text-white text-4xl mt-4 font-light">"I'm listening..."</h1>
+        <h2 className="text-gray-400 tracking-[0.3em] uppercase text-sm">{t('sensing_era')}</h2>
+        <h1 className="text-white text-4xl mt-4 font-light">{t('sensing_title')}</h1>
       </div>
 
       <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />
