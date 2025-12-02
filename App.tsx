@@ -6,6 +6,7 @@ import SectionVoice from './components/SectionVoice';
 import SectionVision from './components/SectionVision';
 import SectionBCI from './components/SectionBCI';
 import SectionFuture from './components/SectionFuture';
+import SectionWrapper from './components/SectionWrapper';
 import { LanguageProvider, useLanguage } from './LanguageContext';
 
 const LanguageSwitcher = () => {
@@ -13,7 +14,7 @@ const LanguageSwitcher = () => {
   return (
     <button
       onClick={toggleLanguage}
-      className="fixed top-6 right-6 z-50 px-4 py-2 rounded-full backdrop-blur-md bg-white/10 border border-white/20 text-white font-mono hover:bg-white/20 transition-all cursor-pointer shadow-lg"
+      className="fixed top-6 right-6 z-50 px-4 py-2 rounded-full backdrop-blur-md bg-white/10 border border-white/20 text-white font-mono hover:bg-white/20 transition-all cursor-pointer shadow-lg hover:scale-105 active:scale-95"
     >
       {language === 'en' ? 'CN / 英文' : 'EN / 中文'}
     </button>
@@ -22,29 +23,39 @@ const LanguageSwitcher = () => {
 
 const AppContent: React.FC = () => {
   return (
-    <main className="w-full bg-black">
+    <main className="w-full bg-black relative">
       <LanguageSwitcher />
       
-      {/* 1. Mechanical Era */}
-      <SectionMechanical />
+      {/* Scroll Progress Line (Visual Only) */}
+      <div className="fixed left-6 md:left-12 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent z-40 hidden md:block pointer-events-none" />
 
-      {/* 2. Desktop Era */}
-      <SectionDesktop />
+      <SectionWrapper eraPrefix="era_mech" index={0}>
+        <SectionMechanical />
+      </SectionWrapper>
 
-      {/* 3. Touch Era */}
-      <SectionTouch />
+      <SectionWrapper eraPrefix="era_desktop" index={1}>
+        <SectionDesktop />
+      </SectionWrapper>
 
-      {/* 4. Generative Voice Era (Split Part 1) */}
-      <SectionVoice />
+      <SectionWrapper eraPrefix="era_touch" index={2}>
+        <SectionTouch />
+      </SectionWrapper>
 
-      {/* 5. Spatial Vision Era (Split Part 2) */}
-      <SectionVision />
+      <SectionWrapper eraPrefix="era_voice" index={3}>
+        <SectionVoice />
+      </SectionWrapper>
 
-      {/* 6. Brain-Computer Interface (Renumbered) */}
-      <SectionBCI />
+      <SectionWrapper eraPrefix="era_vision" index={4}>
+        <SectionVision />
+      </SectionWrapper>
 
-      {/* 7. Future / Manifestation (Renumbered) */}
-      <SectionFuture />
+      <SectionWrapper eraPrefix="era_bci" index={5}>
+        <SectionBCI />
+      </SectionWrapper>
+
+      <SectionWrapper eraPrefix="era_future" index={6}>
+        <SectionFuture />
+      </SectionWrapper>
       
     </main>
   );

@@ -4,14 +4,11 @@ import { useLanguage } from '../LanguageContext';
 const SectionDesktop: React.FC = () => {
   const { t } = useLanguage();
   const [text, setText] = useState('');
-  
-  // Fetch the translated string
   const fullText = t('desktop_typing');
 
   useEffect(() => {
     let index = 0;
-    setText(''); // Reset text when language changes
-    
+    setText('');
     const intervalId = setInterval(() => {
       setText((prev) => {
         if (index < fullText.length) {
@@ -19,39 +16,37 @@ const SectionDesktop: React.FC = () => {
             index++;
             return prev + char;
         } else {
-            // Reset loop for endless effect
             index = 0;
             return '';
         }
       });
-    }, 100); // Typing speed
-
+    }, 50);
     return () => clearInterval(intervalId);
-  }, [fullText]); // Add fullText dependency to restart animation on language switch
+  }, [fullText]);
 
   return (
-    <section className="w-full h-screen bg-[#0000AA] flex flex-col items-center justify-center font-['VT323',_monospace] text-white p-8 overflow-hidden relative border-t-4 border-gray-400 box-border">
+    <div className="w-full h-full bg-[#000080] flex items-center justify-center font-['VT323',_monospace] relative overflow-hidden">
       
       {/* Scanline Effect */}
       <div className="absolute inset-0 z-10 pointer-events-none opacity-20 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))]" style={{ backgroundSize: "100% 2px, 3px 100%" }}></div>
+      <div className="absolute inset-0 bg-black/20 z-0"></div>
 
-      <div className="w-full max-w-3xl border-2 border-white p-1 min-h-[50vh] shadow-[10px_10px_0px_rgba(0,0,0,0.5)] bg-[#0000AA] z-20">
-        <div className="bg-white text-[#0000AA] px-2 py-1 mb-4 flex justify-between uppercase font-bold text-xl">
-            <span>{t('desktop_cmd')}</span>
-            <span>[X]</span>
+      {/* Floating Terminal Windows */}
+      <div className="absolute right-[-10%] md:right-[10%] top-[20%] w-[120%] md:w-[600px] border-2 border-gray-300 shadow-[10px_10px_0px_rgba(0,0,0,0.5)] bg-[#0000AA] rotate-[-5deg] opacity-60 md:opacity-100 scale-75 md:scale-100 transform-gpu">
+         <div className="bg-gray-300 text-black px-2 py-1 flex justify-between uppercase font-bold text-lg">
+            <span>Terminal.exe</span>
+            <div className="flex gap-1">
+                <div className="w-4 h-4 bg-gray-400 border border-gray-500 shadow-inner"></div>
+                <div className="w-4 h-4 bg-gray-400 border border-gray-500 shadow-inner"></div>
+            </div>
         </div>
-        
-        <div className="text-2xl md:text-3xl leading-relaxed whitespace-pre-wrap">
-          {text}
-          <span className="animate-pulse inline-block w-3 h-8 bg-white ml-1 align-middle"></span>
+        <div className="p-4 text-green-400 text-xl leading-relaxed whitespace-pre-wrap h-[300px] overflow-hidden">
+            {text}
+            <span className="animate-pulse inline-block w-3 h-6 bg-green-400 ml-1 align-middle"></span>
         </div>
       </div>
 
-      <div className="mt-8 text-center opacity-70 z-20">
-        <p className="text-xl">{t('desktop_era')}</p>
-        <p className="text-sm">{t('desktop_sub')}</p>
-      </div>
-    </section>
+    </div>
   );
 };
 

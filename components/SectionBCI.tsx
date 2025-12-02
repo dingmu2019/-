@@ -1,150 +1,80 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { useLanguage } from '../LanguageContext';
 
 const SectionBCI: React.FC = () => {
   const { t } = useLanguage();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let tick = 0;
-
-    // Hexagon configuration
-    const hexRadius = 30;
-    const hexHeight = Math.sqrt(3) * hexRadius;
-    const hexWidth = 2 * hexRadius;
-    const hexSide = (3 / 2) * hexRadius;
-
-    // Grid state to simulate "nanotech spread"
-    let cells: { x: number, y: number, cx: number, cy: number, active: number }[] = [];
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initGrid();
-    };
-
-    const initGrid = () => {
-      cells = [];
-      const cols = Math.ceil(canvas.width / hexSide) + 2;
-      const rows = Math.ceil(canvas.height / hexHeight) + 2;
-
-      for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-          const x = i * hexSide;
-          const y = j * hexHeight + (i % 2 === 0 ? 0 : hexHeight / 2);
-          
-          cells.push({
-            x: i,
-            y: j,
-            cx: x,
-            cy: y,
-            active: Math.random() // Random initial offset for pulsing
-          });
-        }
-      }
-    };
-
-    const drawHex = (cx: number, cy: number, radius: number) => {
-      ctx.beginPath();
-      for (let i = 0; i < 6; i++) {
-        const angle = (Math.PI / 3) * i;
-        const x = cx + radius * Math.cos(angle);
-        const y = cy + radius * Math.sin(angle);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.closePath();
-    };
-
-    const render = () => {
-      // Dark metallic background
-      ctx.fillStyle = '#050510'; 
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      tick += 0.02;
-
-      cells.forEach(cell => {
-        // Calculate "activation" based on distance from mouse or center
-        // Here we simulate a wave passing through
-        const distFromCenter = Math.sqrt(Math.pow(cell.cx - canvas.width/2, 2) + Math.pow(cell.cy - canvas.height/2, 2));
-        
-        // Complex wave pattern
-        const wave = Math.sin(distFromCenter * 0.01 - tick * 2) + Math.sin(cell.cx * 0.02 + tick) + Math.sin(cell.cy * 0.03);
-        const isActive = wave > 0.5;
-        const opacity = isActive ? (wave - 0.5) * 0.8 : 0.05;
-
-        // Draw the mesh lines
-        ctx.strokeStyle = `rgba(30, 60, 100, 0.2)`;
-        ctx.lineWidth = 1;
-        drawHex(cell.cx, cell.cy, hexRadius);
-        ctx.stroke();
-
-        // Draw filled "Nanotech" cells
-        if (opacity > 0.1) {
-            // Gradient fill for that metallic suit look
-            const gradient = ctx.createRadialGradient(cell.cx, cell.cy, 0, cell.cx, cell.cy, hexRadius);
-            gradient.addColorStop(0, `rgba(100, 200, 255, ${opacity})`);
-            gradient.addColorStop(1, `rgba(20, 40, 100, ${opacity * 0.5})`);
-            
-            ctx.fillStyle = gradient;
-            ctx.fill();
-
-            // Inner highlight
-            ctx.strokeStyle = `rgba(150, 230, 255, ${opacity * 1.5})`;
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        }
-      });
-
-      animationFrameId = requestAnimationFrame(render);
-    };
-
-    resize();
-    render();
-    window.addEventListener('resize', resize);
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
+  const signalFlowVariant = {
+    animate: {
+      pathLength: [0, 1],
+      opacity: [0, 1, 0],
+      transition: { duration: 1.5, repeat: Infinity, ease: "linear" }
+    }
+  };
 
   return (
-    <section className="w-full h-screen bg-[#050510] flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="w-full h-full bg-[#02040a] flex flex-col items-center justify-center relative overflow-hidden text-cyan-500 font-mono">
       
-      {/* Overlay Vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_90%)] z-10 pointer-events-none"></div>
-
-      <div className="z-20 text-center relative max-w-2xl px-6">
-        <h2 className="text-blue-400 tracking-widest uppercase text-xs mb-4 font-bold">{t('bci_era')}</h2>
-        
-        {/* Glitchy Tech Title */}
-        <h1 className="text-white text-5xl font-bold tracking-tight mb-6 drop-shadow-[0_0_15px_rgba(0,200,255,0.5)]">
-           {t('bci_title')}
-        </h1>
-        
-        <p className="text-blue-200/70 text-lg font-light tracking-wide">
-          {t('bci_sub')}
-        </p>
-      </div>
-
-      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
+      {/* Background Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,100,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,100,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
       
-      {/* Decorative HUD Elements for Suit UI */}
-      <div className="absolute z-10 w-full h-full pointer-events-none">
-          <div className="absolute top-1/2 left-10 w-1 h-32 bg-gradient-to-b from-transparent via-blue-500 to-transparent opacity-50"></div>
-          <div className="absolute top-1/2 right-10 w-1 h-32 bg-gradient-to-b from-transparent via-blue-500 to-transparent opacity-50"></div>
-          
-          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-64 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-      </div>
+      {/* Main Visual Positioned to Right */}
+      <div className="absolute right-0 md:right-[10%] top-1/2 -translate-y-1/2 opacity-60 md:opacity-80 scale-75 md:scale-100">
+        <div className="relative w-[300px] h-[500px]">
+            
+            {/* The Biological Human Silhouette (Base) */}
+            <svg viewBox="0 0 200 400" className="absolute inset-0 w-full h-full drop-shadow-[0_0_15px_rgba(0,255,255,0.3)]">
+                <defs>
+                    <linearGradient id="bioGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#00f2ff" stopOpacity="0.1" />
+                        <stop offset="100%" stopColor="#00f2ff" stopOpacity="0.05" />
+                    </linearGradient>
+                </defs>
+                
+                <path 
+                    d="M100,30 C115,30 125,40 125,55 C125,70 115,80 100,80 C85,80 75,70 75,55 C75,40 85,30 100,30 Z 
+                       M100,80 L100,180 
+                       M100,85 L140,110 L150,190 
+                       M100,85 L60,110 L50,190 
+                       M100,180 L130,250 L130,380 
+                       M100,180 L70,250 L70,380"
+                    fill="url(#bioGradient)"
+                    stroke="#0088ff"
+                    strokeWidth="1"
+                    strokeOpacity="0.3"
+                />
+                
+                {/* Brain Node (The Source) */}
+                <motion.circle cx="100" cy="55" r="4" fill="#fff" 
+                    animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.2, 1] }} 
+                    transition={{ duration: 1, repeat: Infinity }}
+                />
 
-    </section>
+                {/* Neural/Nervous System (Flowing Signals) */}
+                <motion.path d="M100,55 L100,180" stroke="#fff" strokeWidth="2" fill="none" variants={signalFlowVariant} animate="animate" />
+                <motion.path d="M100,90 L140,110 L150,190" stroke="#fff" strokeWidth="1.5" fill="none" variants={signalFlowVariant} animate="animate" />
+                <motion.path d="M100,90 L60,110 L50,190" stroke="#fff" strokeWidth="1.5" fill="none" variants={signalFlowVariant} animate="animate" />
+
+                {/* Scanning Effect */}
+                 <motion.line x1="0" y1="0" x2="200" y2="0" stroke="rgba(255,255,255,0.5)" strokeWidth="2"
+                    animate={{ y: [0, 400] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                    style={{ filter: "drop-shadow(0 0 5px #fff)" }}
+                 />
+            </svg>
+
+            {/* Floating Data Rings */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[60%] border border-cyan-500/30 rounded-full" style={{ transform: 'translate(-50%, -50%) rotateX(60deg)' }}></div>
+            <motion.div 
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[70%] border-l-2 border-r-2 border-cyan-400/50 rounded-full" 
+                style={{ transform: 'translate(-50%, -50%) rotateX(60deg)' }}
+                animate={{ rotateZ: 360 }}
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            />
+        </div>
+      </div>
+    </div>
   );
 };
 
