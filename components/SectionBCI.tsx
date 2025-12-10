@@ -1,11 +1,11 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { useLanguage } from '../LanguageContext';
 
 const SectionBCI: React.FC = () => {
   const { t } = useLanguage();
 
-  const signalFlowVariant = {
+  const signalFlowVariant: Variants = {
     animate: {
       pathLength: [0, 1],
       opacity: [0, 1, 0],
